@@ -40,8 +40,6 @@ def editGenre(genre_id):
     """
     This method is responsible for making edits to the genre name.
     You can edit a specific Genre.
-
-    TODO: add in code to select a particular genre and edit it.
     """
     edit_genre = session.query(Genre).filter_by(id=genre_id).one()
     if request.method == 'POST':
@@ -94,6 +92,12 @@ def newGenre():
             return redirect(url_for('showGenres'))
     else:
         return render_template('newgenre.html')
+
+
+############################ Creating movies #######################
+@app.route('/genres/<int:genre_id>/movies')
+def showMovies(genre_id):
+        pass
 
 
 

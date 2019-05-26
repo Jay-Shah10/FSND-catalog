@@ -124,21 +124,136 @@ session.add(inception)
 session.commit()
  
 # Thriller movie 3: 
+thriller_description_3 = """A Young FBI Candet must recieve the help of an incarcerated and manipulated
+                            cannibal killer to help catch another serial killer, a madman who skins his victims."""
+silence_of_the_lamb = Movies(name="Slience of the Lamb",
+                             description=thriller_description_3,
+                             year=1991,
+                             genre=thriller)
+session.add(silence_of_the_lamb)
+session.commit()
 
-
+###########################################################
 # Creating Classic Genre.
 classic = Genre(name="Classic")
 session.add(classic)
 session.commit()
 
+# These movies are from: https://www.imdb.com/list/ls000183548/
+# Classic movie 1: 
+classic_description = """A manipulative woman and a roguish man conduct a turbulent romance during the American Civil War and Reconstruction periods."""
+gone_with_the_wind = Movies(name="Gone with the Wind.",
+                            description=classic_description,
+                            year=1939,
+                            genre=classic)
+session.add(gone_with_the_wind)
+session.commit()
+
+
+# CLassic movie 2: 
+classic_description_2 = """Dorothy Gale is swept away from a farm in Kansas to a magical land of Oz 
+                           in a tornado and embarks on a quest with her new friends to see the Wizard 
+                           who can help her return home to Kansas and help her friends as well. """
+oz = Movies(name="The Wizard of Oz",
+            description=classic_description_2,
+            year=1939,
+            genre=classic)
+
+# adding the movie in
+session.add(oz)
+session.commit()
+
+# Classic movie 3: 
+classic_description_3 = """The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son. """
+god_father = Movies(name="The Godfather",
+                    description=classic_description_3,
+                    year=1972,
+                    genre=classic)
+# adding movie.
+session.add(god_father)
+session.commit()
+
+
+###########################################################
 # Creating Comedy Genre.
 comedy = Genre(name="Comedy")
 session.add(comedy)
 session.commit()
 
+# Getting this movies from: https://www.imdb.com/search/title?genres=comedy&groups=top_250&sort=user_rating&title_type=feature
+# comedy movie 1: 
+comedy_description_1 = """ Marty McFly, a 17-year-old high school student,
+                           is accidentally sent thirty years into the past in a time-traveling DeLorean invented
+                           by his close friend, the maverick scientist Doc Brown."""
+back_to_the_future = Movies(name="Back to the Future",
+                            description=comedy_description_1,
+                            year=1985,
+                            genre=comedy)
+# adding movie.
+session.add(back_to_the_future)
+session.commit()
+
+# comedy movie 2: 
+comedy_description_2 = """A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy in a boy's room."""
+toy_story = Movies(name="Toy Story",
+                   description=comedy_description_2,
+                   year=1995,
+                   genre=comedy)
+# adding movie
+session.add(toy_story)
+session.commit()
+
+# comedy movie 3: 
+comedy_description_3 = """King Arthur and his Knights of the Round Table embark on a surreal,
+                          low-budget search for the Holy Grail, encountering many, very silly obstacles."""
+monty_python = Movies(name="Monty Python and the Holy Grail",
+                      description=comedy_description_3,
+                      year=1975,
+                      genre=comedy)
+
+# adding movie.
+session.add(monty_python)
+session.commit()
+
+
+###########################################################
 # Creating Drama Genre.
 drama = Genre(name="Drama")
 session.add(drama)
+session.commit()
+
+# These movies are from: https://www.imdb.com/list/ls009668711/
+# Drama movies 1
+drama_description = """The lives of two mob hitmen, a boxer, a gangster & his wife, and a pair of diner bandits intertwine in four tales of violence and redemption."""
+pulp_fiction = Movies(name="Pulp Fiction",
+description=drama_description,
+year=1994,
+genre=drama)
+
+# adding movie
+session.add(pulp_fiction)
+session.commit()
+
+# Drama movie 2
+drama_description_2 = """A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery."""
+gladiator = Movies(name="Gladiator",
+description=drama_description_2,
+year=2000,
+genre=drama)
+
+#adding movie
+session.add(gladiator)
+session.commit()
+
+# Drama movie 3
+drama_description_3 = """A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic."""
+titanic = Movies(name="Titanic",
+description=drama_description_3,
+year=1997,
+genre=drama)
+
+#adding movie
+session.add(titanic)
 session.commit()
 
 print engine

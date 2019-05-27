@@ -127,17 +127,42 @@ def addNewMovie(genre_id):
     else:
        return render_template('newmovie.html', genre=genre)
        
-################# Edit Movie ########################
-# edit movies.
+################# Individualt Movie ########################
+# Shows individual movie.
 @app.route('/genres/<int:genre_id>/movies/<int:movie_id>/')
 def movie(genre_id, movie_id):
     """
     This method is responsible for makeing edits to the
     movie title, description, and year.
     """
+    genre = session.query(Genre).filter_by(id=genre_id).one()
     movie = session.query(Movies).filter_by(id=movie_id).one()
-    return render_template('movie.html', movie=movie)
+    return render_template('movie.html', movie=movie, genre=genre)
 
+################# Edit Movie ########################
+@app.route('/genres/<int:genre_id>/movies/<int:movie_id>/edit/', methods=['GET', 'POST'])
+def editMovie(genre_id, movie_id):
+    """
+    Responsible for makeing edits to the selected movie. 
+    Make edits to the name, year, and description.
+    """
+    genre = session.query(Genre).filter_by(id=genre_id).one()
+    movie = session.query(Movies).filter_by(id=movie_id).one()
+    
+    if request.method == 'POST':
+        title = request.form['title']
+        year = request.form['year']
+        description = request.form['description']
+        movie.name = title
+        movie.year = year
+        movie.description = description
+
+        session.add(movie)
+        session.commit()
+        flash("You have edited a movie.")
+        return redirect(url_for('showMovies', genre_id=genre_id))
+    else:
+        return render_template('editmovie.html', genre=genre, movie=movie)
 
 
 

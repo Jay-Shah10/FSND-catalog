@@ -24,6 +24,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+################# show genre ########################
 @app.route('/genres/')
 def showGenres():
     """
@@ -33,7 +34,7 @@ def showGenres():
     genre = session.query(Genre).order_by(asc(Genre.name))
     return render_template('genre.html', genres=genre)
 
-
+################# edit genre ########################
 # Edit Genres.
 @app.route('/genres/<int:genre_id>/edit/')
 def editGenre(genre_id):
@@ -53,7 +54,7 @@ def editGenre(genre_id):
         return render_template('editgenre.html', genre=edit_genre)
 
 
-
+################# delete Genre ########################
 # Delete Genre.
 @app.route('/genres/<int:genre_id>/delete/', methods=['GET', 'POST'])
 def deleteGenre(genre_id):
@@ -73,7 +74,7 @@ def deleteGenre(genre_id):
         return render_template('delete.html', genre=delete_genre) # Displays the delete page.
 
 
-
+################# Add new Genre ########################
 
 # add new Movie Genre.
 @app.route('/genres/new/', methods=['GET', 'POST'])
@@ -94,10 +95,49 @@ def newGenre():
         return render_template('newgenre.html')
 
 
-############################ Creating movies #######################
-@app.route('/genres/<int:genre_id>/movies')
+################# shows movies. ########################
+@app.route('/genres/<int:genre_id>/movies/')
 def showMovies(genre_id):
-        pass
+    """This will display movies based on genres.
+       this is connected via genre id. this is acting as foreign key in the movies table.
+    """
+    genre = session.query(Genre).filter_by(id=genre_id).one()
+    movie = session.query(Movies).filter_by(genre_id=genre.id).all()
+
+    return render_template('showmovies.html', movies=movie, genre=genre)
+
+
+################# Add new Movie ########################
+@app.route('/genres/<int:genre_id>/newmovie/', methods=['GET','POST'])
+def addNewMovie(genre_id):
+    """
+    This will add new movies to a genre.
+    """
+    genre = session.query(Genre).filter_by(id=genre_id).one()
+
+    if request.method == 'POST':
+       new_movie = Movies(name=request.form['title'], 
+                          description=request.form['description'],
+                          year=request.form['date'], 
+                          genre_id=genre_id)
+       session.add(new_movie)
+       session.commit()
+       flash("New Movie added.")
+       return redirect(url_for('showMovies', genre_id=genre_id))
+    else:
+       return render_template('newmovie.html', genre=genre)
+       
+################# Edit Movie ########################
+# edit movies.
+@app.route('/genres/<int:genre_id>/movies/<int:movie_id>/')
+def movie(genre_id, movie_id):
+    """
+    This method is responsible for makeing edits to the
+    movie title, description, and year.
+    """
+    movie = session.query(Movies).filter_by(id=movie_id).one()
+    return render_template('movie.html', movie=movie)
+
 
 
 

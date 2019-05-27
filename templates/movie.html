@@ -4,7 +4,7 @@
     <p>{{ movie.year }}</p>
     <h3>{{ movie.description }}</h3>
     <br>
-    <a href="#">Edit</a>
+    <a href="{{ url_for('editMovie', genre_id=genre.id, movie_id=movie.id) }}">Edit</a>
     <a href="#">Delete</a>
 </body>
 </html>

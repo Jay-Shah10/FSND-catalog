@@ -1,12 +1,6 @@
-<!Doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Genres</title>
-</head>
-<body>
+{% extends "main.html" %}
+{% block content %}
+
     <h2>Movie Genres</h2>
 
     {% with messages = get_flashed_messages() %}
@@ -35,5 +29,4 @@
 
     <a href="{{ url_for('newGenre') }}">Create new Genre</a>
     
-</body>
-</html>
+{% endblock content %}

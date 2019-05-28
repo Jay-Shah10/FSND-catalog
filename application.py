@@ -153,9 +153,20 @@ def editMovie(genre_id, movie_id):
         title = request.form['title']
         year = request.form['year']
         description = request.form['description']
-        movie.name = title
-        movie.year = year
-        movie.description = description
+
+        if request.form['title'] == "" and request.form['year'] == "":
+            movie.description = description
+
+        elif request.form['year'] == "" and request.form['description'] == "":
+            movie.name = title
+
+        elif request.form['description'] == "" and request.form['title'] == "":
+            movie.year = year
+
+        else:
+            movie.name = title
+            movie.year = year
+            movie.description = description
 
         session.add(movie)
         session.commit()

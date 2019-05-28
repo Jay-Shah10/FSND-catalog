@@ -24,7 +24,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-################# show genre ########################
+################# shows Genres ########################
 @app.route('/genres/')
 def showGenres():
     """
@@ -34,7 +34,7 @@ def showGenres():
     genre = session.query(Genre).order_by(asc(Genre.name))
     return render_template('genre.html', genres=genre)
 
-################# edit genre ########################
+################# Edit Genre. ########################
 # Edit Genres.
 @app.route('/genres/<int:genre_id>/edit/')
 def editGenre(genre_id):
@@ -53,8 +53,7 @@ def editGenre(genre_id):
     else:
         return render_template('editgenre.html', genre=edit_genre)
 
-
-################# delete Genre ########################
+################# Delete Genre. ########################
 # Delete Genre.
 @app.route('/genres/<int:genre_id>/delete/', methods=['GET', 'POST'])
 def deleteGenre(genre_id):
@@ -73,9 +72,7 @@ def deleteGenre(genre_id):
     else:
         return render_template('delete.html', genre=delete_genre) # Displays the delete page.
 
-
-################# Add new Genre ########################
-
+################# add new Genre. ########################
 # add new Movie Genre.
 @app.route('/genres/new/', methods=['GET', 'POST'])
 def newGenre():
@@ -93,8 +90,8 @@ def newGenre():
             return redirect(url_for('showGenres'))
     else:
         return render_template('newgenre.html')
-
-
+        
+        
 ################# shows movies. ########################
 @app.route('/genres/<int:genre_id>/movies/')
 def showMovies(genre_id):
@@ -193,6 +190,7 @@ def deleteMovie(genre_id, movie_id):
         return redirect(url_for('showMovies', genre_id=genre.id))
     else:
         return render_template('deletemovie.html', genre=genre, movie=movie)
+
 
 
 if __name__ == '__main__':

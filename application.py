@@ -164,6 +164,24 @@ def editMovie(genre_id, movie_id):
     else:
         return render_template('editmovie.html', genre=genre, movie=movie)
 
+################# Edit Movie ########################
+@app.route('/genres/<int:genre_id>/movies/<int:movie_id>/delete/', methods=['GET','POST'])
+def deleteMovie(genre_id, movie_id):
+    """
+    This is used to delete a movie in the list.
+    The use will get a confirmation pormpt. if they do so, they will redirected to the 
+    show movies page. Flash mesage will be displayed stating they have deleted a movie.
+    """
+    genre = session.query(Genre).filter_by(id=genre_id).one()
+    movie = session.query(Movies).filter_by(id=movie_id).one()
+
+    if request.method=="POST":
+        session.delete(movie)
+        session.commit()
+        flash("You have deleted a movie.")
+        return redirect(url_for('showMovies', genre_id=genre.id))
+    else:
+        return render_template('deletemovie.html', genre=genre, movie=movie)
 
 
 if __name__ == '__main__':

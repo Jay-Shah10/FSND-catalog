@@ -15,8 +15,8 @@ AUTHORIZATION_SCOPE = 'openid email profile'
 
 AUTH_REDIRECT_URI = 'https://localhost:5000/genres'
 BASE_URI = 'https://localhost:5000'
-CLIENT_ID = '653842356900-fbb9vqsfl0409brrth6rpi9don8ckr1q.apps.googleusercontent.com'
-CLIENT_SECRET = 'rk8Whuy1gQMYLsi3zY1dLH3e'
+CLIENT_ID = ''
+CLIENT_SECRET = ''
 
 
 AUTH_TOKEN_KEY = 'auth_token'

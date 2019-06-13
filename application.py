@@ -23,12 +23,19 @@ app = Flask(__name__)
 engine = create_engine('sqlite:///moviegenre.db', connect_args={'check_same_thread':False}) # do not check for same thread.
 Base.metadata.bind = engine
 
+# binding a session.
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 ################# Login ########################
 @app.route('/login')
 def showLogin():
+    """
+        This will show a third party login in feature.
+        in this case we are using facebook to login.
+        For this method it will create a session token that can be used
+        to verify that the session is for the current user.
+    """
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
     for x in range(32))
     login_session['state'] = state
@@ -39,9 +46,10 @@ def showLogin():
 ################# facebook login ########################
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
-    print 'login_session state', login_session['state']
-    print 'request args state', request.args.get('state')
-
+    """
+        We are using a third party authentication provider to log in a user.
+        in this case we are using facebook. User must have a facebook account.
+    """
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid State Parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -59,12 +67,9 @@ def fbconnect():
     # token = result.split(',')[0].split(":")[1].replace('"', '') # original.
     token = result.split("&")[0] # new.
     print 'token-- %s' %token
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % access_token # original.
-    # url = 'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cemail%2C&access_token=' + access_token 
+    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
-    # print "url sent for API access:%s"% url
-    # print "API JSON result: %s" % result
     data = json.loads(result)
     print json.dumps(data, indent=2, sort_keys=True)
 
@@ -72,8 +77,7 @@ def fbconnect():
     login_session['username'] = data['name']
     login_session['email'] = data['email']
     login_session['facebook_id'] = data['id']
-
-    print login_session
+    # print login_session
 
     # The token must be stored  in the login_session in order to properly signout.
     login_session['access_token'] = token
@@ -95,6 +99,11 @@ def fbconnect():
 ################# facebook disconnect ########################
 @app.route("/fbdisconnect")
 def fbdisconnect():
+    """
+    This will delete the access token from that was gathered from facebook.
+
+    :return: homepage. showGenres()
+    """
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
@@ -102,15 +111,21 @@ def fbdisconnect():
     h = httplib2.Http()
     result = h.request(url, method='DELETE')
     # return "You have logged out."
-
-    # Gather genres and reroute to show the public genre.
-    genre = session.query(Genre).order_by(asc(Genre.name))
-    return render_template('publicgenre.html', genres=genre)
+    return redirect(url_for("showGenres")) # redirects the user to the home page.
 
 
 # Disconnect based on provider
 @app.route('/disconnect')
 def disconnect():
+    """
+    THis method is used to logout.
+    Here we will call fbdisconnect to delete the access_token that is given to us
+    from facebook.
+    We are also deleting the values returned to use in login_session.
+    such as facebook_id, username, email, user_id, and provider.
+
+    : return: the homepage.
+    """
     if 'provider' in login_session:
         if login_session['provider'] == 'facebook':
             fbdisconnect()
@@ -131,6 +146,11 @@ def disconnect():
 
 ################# User helper functions ########################
 def createUser(login_session):
+    """
+    Creates a user in the database if they do not exist.
+
+    :return: user_id - the primary key.
+    """
     newUser = User(name=login_session['username'], email=login_session[
                    'email'])
     session.add(newUser)
@@ -138,7 +158,7 @@ def createUser(login_session):
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
 
-
+# Helper functions.
 def getUserInfo(user_id):
     user = session.query(User).filter_by(id=user_id).one()
     return user
@@ -265,6 +285,7 @@ def addNewMovie(genre_id):
        return redirect(url_for('showMovies', genre_id=genre_id))
     else:
        return render_template('newmovie.html', genre=genre)
+       
        
 ################# Individualt Movie ########################
 # Shows individual movie.

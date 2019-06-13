@@ -100,10 +100,34 @@ def fbdisconnect():
     access_token = login_session['access_token']
     url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
     h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
-    return "you have been logged out"
+    result = h.request(url, method='DELETE')
+    # return "You have logged out."
 
-    # TODO: review this: https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
+    # Gather genres and reroute to show the public genre.
+    genre = session.query(Genre).order_by(asc(Genre.name))
+    return render_template('publicgenre.html', genres=genre)
+
+
+# Disconnect based on provider
+@app.route('/disconnect')
+def disconnect():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'facebook':
+            fbdisconnect()
+            del login_session['facebook_id']
+            del login_session['username']
+            del login_session['email']
+            del login_session['user_id']
+            del login_session['provider']
+            print login_session
+        flash("You have successfully been logged out.")
+        return redirect(url_for('showGenres'))
+    else:
+        flash("You were not logged in")
+        return redirect(url_for('showGenres'))
+
+
+    
 
 ################# User helper functions ########################
 def createUser(login_session):
@@ -136,7 +160,10 @@ def showGenres():
     once the user clicks on this, it will display another page and it will show the actual movies.
     """
     genre = session.query(Genre).order_by(asc(Genre.name))
-    return render_template('genre.html', genres=genre)
+    if 'username' not in login_session:
+        return render_template('publicgenre.html', genres=genre)
+    else:
+        return render_template('genre.html', genres=genre)
 
 ################# Edit Genre. ########################
 # Edit Genres.
@@ -147,6 +174,8 @@ def editGenre(genre_id):
     You can edit a specific Genre.
     """
     edit_genre = session.query(Genre).filter_by(id=genre_id).one()
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     if request.method == 'POST':
         if request.form['name']:
             edit_genre = request.form['name']
@@ -168,6 +197,8 @@ def deleteGenre(genre_id):
 
     # Getting the proper genre needed to delete by genre id.
     delete_genre = session.query(Genre).filter_by(id=genre_id).first()
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     if request.method == 'POST': # this only happens if the method is post.
         session.delete(delete_genre)
         session.commit() # deleteing the Movie Genre.
@@ -185,6 +216,8 @@ def newGenre():
     The database will be updated and the list will be displayed on the homepage.
     """
     genre = Genre()
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     if request.method == "POST":
         if request.form['name']:
             new_genre = request.form['name']
@@ -205,7 +238,10 @@ def showMovies(genre_id):
     genre = session.query(Genre).filter_by(id=genre_id).one()
     movie = session.query(Movies).filter_by(genre_id=genre.id).all()
 
-    return render_template('showmovies.html', movies=movie, genre=genre)
+    if 'username' not in login_session:
+        return render_template('publicshowmovies.html', movies=movie, genre=genre)
+    else:
+        return render_template('showmovies.html', movies=movie, genre=genre)
 
 
 ################# Add new Movie ########################
@@ -215,6 +251,8 @@ def addNewMovie(genre_id):
     This will add new movies to a genre.
     """
     genre = session.query(Genre).filter_by(id=genre_id).one()
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
 
     if request.method == 'POST':
        new_movie = Movies(name=request.form['title'], 
@@ -238,7 +276,11 @@ def movie(genre_id, movie_id):
     """
     genre = session.query(Genre).filter_by(id=genre_id).one()
     movie = session.query(Movies).filter_by(id=movie_id).one()
-    return render_template('movie.html', movie=movie, genre=genre)
+    
+    if 'username' not in login_session:
+        return render_template('publicmovie.html', movie=movie, genre=genre)
+    else:
+        return render_template('movie.html', movie=movie, genre=genre)
 
 ################# Edit Movie ########################
 @app.route('/genres/<int:genre_id>/movies/<int:movie_id>/edit/', methods=['GET', 'POST'])
@@ -250,6 +292,8 @@ def editMovie(genre_id, movie_id):
     genre = session.query(Genre).filter_by(id=genre_id).one()
     movie = session.query(Movies).filter_by(id=movie_id).one()
     
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     if request.method == 'POST':
         title = request.form['title']
         year = request.form['year']
@@ -286,6 +330,9 @@ def deleteMovie(genre_id, movie_id):
     """
     genre = session.query(Genre).filter_by(id=genre_id).one()
     movie = session.query(Movies).filter_by(id=movie_id).one()
+
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
 
     if request.method=="POST":
         session.delete(movie)

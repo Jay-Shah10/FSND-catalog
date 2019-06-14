@@ -56,17 +56,17 @@ individual movie page.
 
 
 ### CRUD
-Edit/update page: 
+Edit/update page:   
 Click on the edit link - you will be routed to a page where
 you can edit the genre title or a movie title or the description dependening on 
 which page you are on.
 
-Delete: 
+Delete:   
 Once the use logs in they can delete an item.
 if clicked the user is confronted with a confirmation page.
 If agreed - the database will udpate and the item will be deleted.
 
-Add New: 
+Add New:   
 if the user is logged in they will have the ability to add new items.
 click on add new.
 if you are in the genres page. add a new genre.
@@ -74,14 +74,14 @@ if you are in the movies section under genres. you can add a new movie.
 The user will have the option to add movie name, description, and year.
 This will update the database. 
 
-Read: 
+Read:   
 Each items is read from the database.
 list of genre is read from the database. 
 when you click the genres it uses the genre_id  and list all movies under that.
 when you click on the movei it uses genre_id and movie_id to read 
 description, title, and year for that specific movie.
 
-## JSON Endpoints
+### JSON Endpoints
 * localhost:8000/genres/json - will show all genres in json format.
 * localhost:8000/movies/josn - shows all movies in json format.
 * localhost:8000/genres/<int:genre_id>/movies/josn - prints movies in a specific genres in json form.

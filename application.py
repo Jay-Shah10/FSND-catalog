@@ -1,9 +1,7 @@
 #!/usr/bin/python2
 
 import os, sys, json
-import random
-import string
-import httplib2
+import random, string, httplib2
 
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from flask import session as login_session
@@ -63,7 +61,7 @@ def fbconnect():
     h = httplib2.Http()
     result = h.request(url, "GET")[1]
     # use token to get user info from API.
-    userinfo_url = 'https://graph.facebook.com/v2.8/me?'
+    # userinfo_url = 'https://graph.facebook.com/v2.8/me?'
     # token = result.split(',')[0].split(":")[1].replace('"', '') # original.
     token = result.split("&")[0] # new.
     print 'token-- %s' %token
@@ -109,7 +107,7 @@ def fbdisconnect():
     access_token = login_session['access_token']
     url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
     h = httplib2.Http()
-    result = h.request(url, method='DELETE')
+    h.request(url, method='DELETE')
     # return "You have logged out."
     return redirect(url_for("showGenres")) # redirects the user to the home page.
 
@@ -235,7 +233,7 @@ def newGenre():
     User can creat a new Move Genere.
     The database will be updated and the list will be displayed on the homepage.
     """
-    genre = Genre()
+    Genre()
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     if request.method == "POST":
@@ -285,7 +283,6 @@ def addNewMovie(genre_id):
        return redirect(url_for('showMovies', genre_id=genre_id))
     else:
        return render_template('newmovie.html', genre=genre)
-       
        
 ################# Individualt Movie ########################
 # Shows individual movie.
@@ -389,7 +386,7 @@ def allMoviesJSON():
 @app.route('/genres/<int:genre_id>/movies/<int:movie_id>/json')
 def oneMovie(genre_id, movie_id):
     """returns json object for a specific movie. """
-    genre = session.query(Genre).filter_by(id=genre_id).one()
+    session.query(Genre).filter_by(id=genre_id).one()
     movie = session.query(Movies).filter_by(id=movie_id).one()
     return jsonify(movie.serialize)
 

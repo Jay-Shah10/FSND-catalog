@@ -29,6 +29,18 @@ movies.
 ```
 
 ## How to
+
+If you want run this locally.
+Used VSCode to code. Need to virtualenv to set up a python 2.7 env.
+```
+py -2 -m virtualenv env
+```
+Activate the env using: 
+```
+.\env\Scripts\activate - for windows.
+or 
+.\env\bin\activate - for linux.
+
 Please have vagrant set up. This repo already has a vagrant file to use. 
 This file is copied from what Udacity originally provided.
 run the following command 

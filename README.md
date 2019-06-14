@@ -62,8 +62,11 @@ the genres page. THey will now have the ability to edit, delete, and add new.
 This functionailty will also be availble on the movies page and 
 individual movie page.
 
+### Authentication
 fb_client_secret.json:   
-This contains Key and secret from my application in facebook.
+This contains Key and secret from my application in facebook.  
+Google+ auth is not used google+ is not longer in use.  
+Not using google auth either. 
 
 
 ### CRUD

@@ -37,6 +37,14 @@ vagrant ssh
 cd /vagrant
 cd catalog
 ```
+1. run database_setup.py - Creates a database.
+```
+python database_setup.py
+```
+2. run populatedatabase.py - this will populate the database, so that the applicaiton can display information.
+```
+python populatedatabase.py
+```
 
 Once you are there run: 
 ```
@@ -53,6 +61,9 @@ Once the user logs in they will be rerouted to the homepage, which is
 the genres page. THey will now have the ability to edit, delete, and add new.
 This functionailty will also be availble on the movies page and 
 individual movie page.
+
+fb_client_secret.json:   
+This contains Key and secret from my application in facebook.
 
 
 ### CRUD

@@ -98,7 +98,7 @@ description, title, and year for that specific movie.
 * localhost:8000/genres/<int:genre_id>/movies/josn - prints movies in a specific genres in json form.
 * localhost:8000/genres/<int:genre_id>/movies/<int:movies_id>/json - shows a speicific movie details in json format.
 
-genre_id and movie_ids can be obtain by running the first two. 
+genre_id and movie_ids can be obtained by running the first two. 
 Subsitute those values in.
 
 

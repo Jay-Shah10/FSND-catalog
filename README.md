@@ -29,14 +29,17 @@ movies.
 ```
 
 ## How to
-Please have vagrant set up. 
+Please have vagrant set up. This repo already has a vagrant file to use. 
+This file is copied from what Udacity originally provided.
 run the following command 
 ```
 vagrant up
 vagrant ssh
 cd /vagrant
-cd catalog
 ```
+If the files from this repo are not found in '/vagrant' dir, 
+try to cd into catalog after /vagrant.  
+
 1. run database_setup.py - Creates a database.
 ```
 python database_setup.py

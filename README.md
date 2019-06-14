@@ -40,10 +40,11 @@ Activate the env using:
 .\env\Scripts\activate - for windows.
 or 
 .\env\bin\activate - for linux.
-
+```
 Please have vagrant set up. This repo already has a vagrant file to use. 
 This file is copied from what Udacity originally provided.
 run the following command 
+
 ```
 vagrant up
 vagrant ssh
